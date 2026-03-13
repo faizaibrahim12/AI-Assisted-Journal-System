@@ -56,11 +56,12 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<"write" | "entries" | "insights">("write");
 
   const userId = "123";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
   const fetchEntries = async () => {
     try {
       setLoading(true);
-      const res = await axios.get<JournalEntry[]>(`http://localhost:5000/api/journal/${userId}`);
+      const res = await axios.get<JournalEntry[]>(`${API_URL}/journal/${userId}`);
       setEntries(res.data);
       setLoading(false);
     } catch (err) {
@@ -76,7 +77,7 @@ export default function Home() {
     }
     try {
       setLoading(true);
-      await axios.post("http://localhost:5000/api/journal", {
+      await axios.post(`${API_URL}/journal`, {
         userId,
         ambience,
         text,
@@ -99,7 +100,7 @@ export default function Home() {
     }
     try {
       setLoading(true);
-      const res = await axios.post<AnalysisResult>("http://localhost:5000/api/journal/analyze", { text });
+      const res = await axios.post<AnalysisResult>(`${API_URL}/journal/analyze`, { text });
       setAnalysis(res.data);
       setError("");
       setLoading(false);
@@ -112,7 +113,7 @@ export default function Home() {
   const fetchInsights = async () => {
     try {
       setLoading(true);
-      const res = await axios.get<Insights>(`http://localhost:5000/api/journal/insights/${userId}`);
+      const res = await axios.get<Insights>(`${API_URL}/journal/insights/${userId}`);
       setInsights(res.data);
       setError("");
       setLoading(false);
